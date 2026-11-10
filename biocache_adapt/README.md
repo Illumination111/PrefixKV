@@ -10,8 +10,9 @@ callback-based LLaVA-OV streaming adapter. Existing `prefixkv.py`,
 - `push_frames(timestamped_frames, available_until)`: accepts caller-decoded
   frames only, enforces monotonic timestamps, and rejects future frames.
 - `answer(query)` (alias `query`) / `close_stream()`
-- `persistent_state()`, `static_state()`, `temporary_state()`, and recursive
+- `persistent_state()`, `static_extra_state()`, `temporary_state()`, and recursive
   `state_bytes()`
+  (`static_state()` remains a compatibility alias).
 
 After every video prefill, `PrefixSelectionPolicy.update_after_video_prefill`
 updates importance using attention scores keyed by absolute token positions.

@@ -214,8 +214,12 @@ class LlavaOVPrefixKVAdapter:
     def persistent_state(self) -> Mapping[str, Any]:
         return {"video_kv": self.video_cache, "importance": self.policy.importance}
 
-    def static_state(self) -> Mapping[str, Any]:
+    def static_extra_state(self) -> Mapping[str, Any]:
         return {"budget": self.policy.budget}
+
+    def static_state(self) -> Mapping[str, Any]:
+        """Backward-compatible alias for the canonical static-extra state."""
+        return self.static_extra_state()
 
     def temporary_state(self) -> Mapping[str, Any]:
         return {
@@ -224,7 +228,9 @@ class LlavaOVPrefixKVAdapter:
         }
 
     def state_bytes(self) -> Dict[str, Any]:
-        return state_report(self.persistent_state(), self.static_state(), self.temporary_state())
+        return state_report(
+            self.persistent_state(), self.static_extra_state(), self.temporary_state()
+        )
 
     def close_stream(self) -> Dict[str, Any]:
         if not self._opened:
